@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<title>MoanBakan</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<style type="text/css">
+			#dummy { display: none; }
+		</style>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+	<div id="dummy">
+		<iframe id="moanmyip"></iframe>
+	</div>
+
+	<div class="reveal">
+		<div class="slides">
+
+			<section>
+				<h1>IPアドレスをエロい声で喋る</h1>
+				<p>
+					<small>
+						<a href="http://osa030.hatenablog.com">@osa030</a>
+					</small>
+				</p>
+				<p>
+					<small>
+						Powered by <a href="http://www.moanmyip.com">MoanMyIP.com</a>/
+						<a href="http://lab.hakim.se/reveal-js">REVEAL.JS</a>
+					</small>
+				</p>
+			</section>
+
+			<section>
+				<h2>このサイトは?</h2>
+				<p>
+					IPアドレスをエロい声で喋ってくれるという伝説のサイト「MoanMyIP.com」をスマートフォンやタブレットなどのFlash非対応デバイスでも体験してもらう為だけに作ったページです。なお、作者とMoanMyIP.com運営会社とは何の関係もありません。
+				</p>
+			</section>
+			<section>
+				<section id="fragments">
+					<h2>注意</h2>
+					<ul>
+						<li>この先のコンテンツは音がでます。エロい声が。</li>
+						<li>でもIPアドレスを言ってるだけなので決してアダルトサイトではありません。たぶん。</li>
+						<li>閲覧環境次第で色々と面倒になりそうな場合はヘッドホン等を着用してください。</li>
+					</ul>
+					<br>
+					<p><small>アクセス先の本家サイトは海外サイトになります。気になる方はここで踏みとどまって下さい。</small></p>
+				</section>
+			</section>
+
+			<section data-state="gogoheaven" data-transition="slide" data-background="#FF5E99" data-background-transition="zoom">
+				<h2>準備はいいですか?</h2>
+				<div id="realmoan">
+					<p>このブラウザはFlashが使えるようです。<a href="http://www.moanmyip.com">本家のMoanMyIP</a>でお楽しみ下さい。</p>
+				</div>
+				<div id="mymoan">
+					<h1 id="myip"></h1>
+					<p id="msg">準備ができるまでお待ちください…</p>
+				</div>
+			</section>
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+	<script src="js/jquery-1.11.2.min.js"></script>
+	<script>
+		var hasFlash = false;
+		try {
+			var fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+			if (fo) {
+				hasFlash = true;
+			}
+		} catch (e) {
+			if (navigator.mimeTypes
+					&& navigator.mimeTypes['application/x-shockwave-flash'] != undefined
+					&& navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) {
+				hasFlash = true;
+			}
+		}
+		if(hasFlash){
+			$('#mymoan').hide(0);
+		}else{
+			$('#realmoan').hide(0);
+		}
+
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			history: true,
+			center: true,
+			transition: 'slide'
+		});
+
+		var loaded = false;
+		const MOANMYIP = "http://www.moanmyip.com";
+		Reveal.addEventListener( 'gogoheaven', function() {
+			if( !loaded ){
+				loaded = true;
+				if( !hasFlash ){
+					$('#moanmyip').attr("src",MOANMYIP);
+					$('#moanmyip').load(function () {
+						console.log("moanmyip load complete");
+						$.getJSON("http://api.ipify.org?format=jsonp&callback=?",
+								function(json) {
+									$("#msg").text("心の準備ができたら再生ボタンを押そう");
+									$("#myip").text("IPは" + json.ip)
+
+									var audioPlayer = document.createElement('audio');
+									audioPlayer.setAttribute('src', MOANMYIP + "/output/" + json.ip + ".mp3");
+									audioPlayer.setAttribute('controls', 'controls');
+									audioPlayer.setAttribute('autoplay', 'false');
+									$('#mymoan').append(audioPlayer);
+									audioPlayer.load();
+									audioPlayer.pause();
+									audioPlayer.currentTime = 0;
+								}
+						);
+					});
+				}
+			}
+		}, false );
+
+	</script>
+	</body>
+</html>
